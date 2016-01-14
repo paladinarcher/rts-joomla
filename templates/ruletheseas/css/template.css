@@ -6978,12 +6978,12 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 body.site {
-	border-top: 3px solid #0088cc;
+	/* border-top: 3px solid #0088cc;
 	padding: 20px;
-	background-color: #f4f6f7;
+	background-color: #f4f6f7; */
 }
 body.site.fluid {
-	background-color: #ffffff;
+	/* background-color: #ffffff; */
 }
 .thumbnail {
 	margin-bottom: 9px;
@@ -7035,13 +7035,16 @@ body.site.fluid {
 .container {
 	max-width: 960px;
 }
+.body {
+    margin-top:250px;
+}
 .body .container {
-	background-color: #fff;
+	/* background-color: #fff; */
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 	padding: 20px;
-	border: 1px solid rgba(0,0,0,0.15);
+	/* border: 1px solid rgba(0,0,0,0.15); */
 	-moz-box-shadow: 0px 0px 6px rgba(0,0,0,0.05);
 	-webkit-box-shadow: 0px 0px 6px rgba(0,0,0,0.05);
 	box-shadow: 0px 0px 6px rgba(0,0,0,0.05);

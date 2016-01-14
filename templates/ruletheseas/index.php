@@ -52,7 +52,7 @@ if (file_exists($userCss) && filesize($userCss) > 0)
 {
 	$doc->addStyleSheetVersion('templates/' . $this->template . '/css/user.css');
 }
-
+$doc->addStyleSheet('//www.ruletheseas.com/css/bootstrapdark.css');
 // Load optional RTL Bootstrap CSS
 JHtml::_('bootstrap.loadCss', false, $this->direction);
 
@@ -107,7 +107,7 @@ else
 	<style type="text/css">
 		body.site
 		{
-			border-top: 3px solid <?php echo $this->params->get('templateColor'); ?>;
+			/* border-top: 3px solid <?php echo $this->params->get('templateColor'); ?>; */
 			background-color: <?php echo $this->params->get('templateBackgroundColor'); ?>
 		}
 		a
@@ -133,8 +133,9 @@ else
 	. ($itemid ? ' itemid-' . $itemid : '')
 	. ($params->get('fluidContainer') ? ' fluid' : '');
 	echo ($this->direction == 'rtl' ? ' rtl' : '');
-?>">
+?>" id="body" style="background: url('//www.ruletheseas.com/images/www.ruletheseas.com_Main.jpg') no-repeat top center black;">
 
+    
 	<!-- Body -->
 	<div class="body">
 		<div class="container<?php echo ($params->get('fluidContainer') ? '-fluid' : ''); ?>">
