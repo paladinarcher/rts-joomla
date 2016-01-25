@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0.0" type="plugin" group="api" method="upgrade">
+    <name>Api - RTS Users</name>
+    <version>0.0.1</version>
+    <creationDate>01/25/2016</creationDate>
+    <author>Rule the Seas LLC</author> 
+    <authorEmail>dath@ruletheseas.com</authorEmail> 
+    <authorUrl>www.ruletheseas.com</authorUrl> 
+    <copyright>Rule The Seas LLC. All rights reserved.</copyright> 
+    <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+    <description>This plugin handles functionality for inter-op compatibilities with RTS.</description>
+    <files>
+        <filename plugin="rtsusers">rtsusers.php</filename>
+        <folder>rtsusers</folder> 
+    </files>
+</extension>
