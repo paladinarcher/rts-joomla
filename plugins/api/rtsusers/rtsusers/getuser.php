@@ -147,13 +147,18 @@ class RtsusersApiResourceGetuser extends ApiResource {
         $server = $app->input->get('server', '', 'string');
         $key = $app->input->get('key', '', 'string');
         
+        try {
+            $fromRemote = $this->getRemote($server, $user['id'], $key);
+        } catch(Exception $ex) {
+            return $this->ret(405, $ex->getMessage(), new stdClass());
+        }
+        
         if(!$this->isRTSServer($server)) { return $this->ret(405,"Unauthorized server. Sorry.", new stdClass()); }
         $u = $this->findUser($server, $user['id']);
         if($u->id) {
             //$obj->user = $u;
         } else {
             try {
-                $fromRemote = $this->getRemote($server, $user['id'], $key);
                 //error_log(print_r($fromRemote, true));
                 $u = $this->createUser($server, $fromRemote);
             } catch (Exception $ex) { return $this->ret(405, $ex->getMessage(), new stdClass()); }
