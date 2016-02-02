@@ -46,8 +46,7 @@ class RtsusersApiResourceGetuser extends ApiResource {
         $session = JFactory::getSession();
         $session->set('user', $user);
         JPluginHelper::importPlugin('user');
-        $result = JFactory::getApplication('site')->triggerEvent('onUserLogin', array(array('username'=>$user->username), array('action' => 'core.login.site')));
-        error_log(print_r($result, true));
+        JFactory::getApplication('site')->triggerEvent('onUserLogin', array(array('username'=>$user->username), array('action' => 'core.login.site')));
         return $user;
     }
     public function createUser($server, $fromRemote) {
@@ -162,6 +161,9 @@ class RtsusersApiResourceGetuser extends ApiResource {
         $obj = new stdClass();
         $obj->user = $u;
         if($u->id) { $obj->hash = $this->getUserHash($u); }
+        $obj->cookie = new stdClass();
+        $obj->cookie->name = session_name();
+        $obj->cookie->id = session_id();
         return $this->ret(200, "Great job!", $obj);
     }
     public function getRemote($server, $user_id, $key) {
