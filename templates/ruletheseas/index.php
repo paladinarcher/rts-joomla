@@ -120,9 +120,14 @@ else
 			background: <?php echo $this->params->get('templateColor'); ?>;
 		}
                 div.hud {
-                    width:100%;
+                    width:960px;
                     height:275px;
+                    margin:0 auto;
                 }
+                div.hud table{
+                    background-color: transparent;
+                }
+                div.hud > span
 	</style>
 	<?php endif; ?>
 	<!--[if lt IE 9]>
@@ -220,10 +225,14 @@ else
         <?php if(!$user->guest) { ?>
         <script type="text/javascript">
             var HUD = {
+                Server: { 
+                    URL: '<?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?>',
+                    Key: '<?php echo $user->getParam('active_rts_key', 'OOPS'); ?>',
+                },
                 OnUpdate: function (func) {
                     jQuery('#hud').bind('update', func);
                 }, Update: function (){
-                    var hudURL = '//<?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?>/serve/serve_me.php?what=zwrap&action=user_hud&key=<?php echo $user->getParam('active_rts_key', 'OOPS'); ?>';
+                    var hudURL = '//'+this.Server.URL+'/serve/serve_me.php?what=zwrap&action=user_hud&key='+this.Server.Key;
                     //jQuery('#hud').load(hudURL, function(response, statusText, jqXHR) {
                     //   jQuery('#hud').trigger('update', [response, statusText, jqXHR]);
                     //});
@@ -238,6 +247,15 @@ else
                             //$.cookie(res.cookie.name, res.cookie.id, { domain: '.ruletheseas.com', path: '/' }); //'{$JOOMLA_URL}'
                             console.log(res);
                             jQuery('#hud').html(res).trigger('update', [res, statusText, jqXHR]);
+                            jQuery('#hud a').each(function () {
+                                jQuery(this).attr('href',"//"+ HUD.Server.URL + "/" + jQuery(this).attr('href'));
+                            });
+                            jQuery('#hud img').each(function () {
+                                jQuery(this).attr('src',"//"+ HUD.Server.URL + "/" + jQuery(this).attr('src'));
+                            });
+                            jQuery('#hud *[background]').each(function () {
+                                jQuery(this).attr('background',"//"+ HUD.Server.URL + "/" + jQuery(this).attr('background'));
+                            });
                         },
                         error: function (jqXHR, textStatus, errorThrown ) {
                             console.log(jqXHR, textStatus, errorThrown);
