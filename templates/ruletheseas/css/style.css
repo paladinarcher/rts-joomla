@@ -1,0 +1,100 @@
+HTML {height: 100%;}
+*{margin:0;padding:0;}
+img{border:none;}
+a { color: #CCCC99;}
+BODY {
+	text-align:center; background-color: black; margin: 0; padding: 0; background-repeat: repeat-x; color: #eeeeee; font-family: tahoma, arial, verdana; font-size: 12px; }
+
+#exa1a { position: absolute; color: #333; visibility: visible; z-index:2; font-weight:bold; }
+#exa1b { position: absolute; color: #CCC; visibility: visible; z-index:1; font-weight:bold; left: 2px; top: -2px; } 
+
+.textls { border:1px SOLID #6a1715; padding:2px; background: #6a1715; color:#FFCC00; font-weight: bold; }
+.textrs { padding-left:5px; border-top: 1px SOLID #6a1715; border-right: 1px SOLID #6a1715; }
+.textbs { border:1px SOLID #6a1715; border-top: 0px; padding:2px; }
+.tcw { color:#EEE; }
+.tcy { color:yellow; }
+
+#wrapper { margin:0 auto; width: 772px;text-align: left;}
+#header { height: 197px; width: 759px;}
+#top1 { width: 1030px; height:162px; padding:0px; background-image:url(images/top1.jpg); background-repeat: no-repeat; }
+#top2 { width: 1030px; height:142px; padding:0px; background-image:url(images/top2.gif); background-repeat: no-repeat; }
+#bottom { width: 1030px; margin-left: auto; margin-right: auto; height:550px; padding:0px; background-image:url(images/bottom.gif); background-repeat: no-repeat; }
+#content { }
+#left { float: left; width: 496px; padding-right: 4px; height: 400px;}
+p{padding:12px; line-height: 18px;}
+#right { float: right; width: 255px; padding-left: 4px; height: 400px;}
+.pad{padding-top: 6px;}
+.block { background-color: #AA9171; height: 20px; border:2px SOLID #693517; color: white;font-size: 14px; font-weight:bold; padding-left: 8px; display:block}
+.block2 { background-color: #1e1e20; height: 20px; width: 100%; border-width: 3px; border: solid; border-color: #333335; color: white; font-family: tahoma, arial, verdana; font-size: 16px; font-weight: bold; padding-left: 8px; clear:both;}
+.block2 span{ font-size: 12px; font-weight: normal; }
+.block2 a, span{ color: #CCCC99; }
+.citmen { background-color: #cacaca; text-align: center; }
+.citmen a{ color: black; }
+
+label{ width:4em; float:left; text-align:right; margin: 0 1em 10px 0; clear: both; }
+
+.fp-fs{ padding: 5px 0px 5px 10px; border: #693517 solid 2px; width: 100% }
+
+.fp-leg{ font-size:14px; font-weight:bold; margin-left:2px;background:#AA9171; color: white; border: #693517 solid 2px; padding: 1px 10px; } 
+.input-box{float: left;margin-bottom: 10px;color: #003300; border: #003300 solid 1px; }
+
+.ed{
+		background: black;
+                border: 1px SOLID #6a1715;
+                padding: 1px;
+                color: #FFCC66;
+        }
+
+
+.submit-botton{margin-top: 5px; color: #000; background: #fff; border: 2px #003300 outset; }
+
+TR.odd{
+
+background-color: #6A1715;
+
+padding:1px;
+
+margin-top: 2px;
+
+}
+
+TR.even{
+
+background-color: black;
+
+}
+
+#skeet_tt_tooltip{
+  background-color:#010101;
+  border:1px solid #37375A;
+  color: orange;
+  position:absolute;
+  display:none;
+  z-index:20000;
+  padding:2px;
+  font-size:0.9em;
+  -moz-border-radius:6px;       /* Rounded edges in Firefox */
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", Arial, sans-serif;
+
+}
+
+#wiki .aa, #wiki .bb, #wiki .cc, #wiki .ee, #general_ajax .aa, #general_ajax .bb, #general_ajax .cc, #general_ajax .ee{
+        padding: 0;
+        width: 548px;
+        float: left;
+        margin: 10px 25px 20px 0px;
+        height: auto;
+}
+
+#wiki .aa, #general_ajax .aa {width: 540px;}
+#wiki .bb, #general_ajax .bb {width: 257px;}
+#wiki .cc, #general_ajax .cc {width: 163px;}
+#wiki .ee, #general_ajax .ee {width: 730px;}
+#wiki .aa, #wiki .bb, #wiki .cc, #wiki .ee {border:1px solid red;}
+
+.forum_image{
+    max-width: 400px;
+    max-height: 350px;
+    width: expression(this.width > 400 ? "400px" : true);
+    height: expression(this.height > 300 ? "300px" : true);
+}

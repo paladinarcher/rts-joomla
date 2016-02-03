@@ -52,7 +52,9 @@ if (file_exists($userCss) && filesize($userCss) > 0)
 {
 	$doc->addStyleSheetVersion('templates/' . $this->template . '/css/user.css');
 }
-$doc->addStyleSheet('//www.ruletheseas.com/css/bootstrapdark.css');
+$doc->addStyleSheet('//'.$user->getParam('active_rts_site', 'www.ruletheseas.com').'/css/bootstrapdark.css');
+$doc->addStyleSheet('//'.$user->getParam('active_rts_site', 'www.ruletheseas.com').'/style2.css');
+$doc->addStyleSheet('//'.$user->getParam('active_rts_site', 'www.ruletheseas.com').'/style.css');
 // Load optional RTL Bootstrap CSS
 JHtml::_('bootstrap.loadCss', false, $this->direction);
 
@@ -127,7 +129,9 @@ else
                 div.hud table{
                     background-color: transparent;
                 }
-                div.hud > span
+                div.hud table td {
+                    text-align:left;
+                }
 	</style>
 	<?php endif; ?>
 	<!--[if lt IE 9]>
@@ -143,7 +147,7 @@ else
 	. ($params->get('fluidContainer') ? ' fluid' : '');
 	echo ($this->direction == 'rtl' ? ' rtl' : '');
 ?>" id="body" style="background: url('//<?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?>/images/<?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?>_Main.jpg') no-repeat top center black;">
-
+<?php if(!$user->guest) { ?>
     <div class="hud" id="hud">
         
     </div>
@@ -222,59 +226,67 @@ else
 			</p>
 		</div>
 	</footer>
-        <?php if(!$user->guest) { ?>
+
         <script type="text/javascript">
-            var HUD = {
+            var RTS = {
                 Server: { 
                     URL: '<?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?>',
                     Key: '<?php echo $user->getParam('active_rts_key', 'OOPS'); ?>',
                 },
-                OnUpdate: function (func) {
-                    jQuery('#hud').bind('update', func);
-                }, Update: function (){
-                    var hudURL = '//'+this.Server.URL+'/serve/serve_me.php?what=zwrap&action=user_hud&key='+this.Server.Key;
-                    //jQuery('#hud').load(hudURL, function(response, statusText, jqXHR) {
-                    //   jQuery('#hud').trigger('update', [response, statusText, jqXHR]);
-                    //});
-                    var jqXHR = jQuery.ajax({
-                        type: "GET",
-                        url: hudURL,
-                        data: {},
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        success: function (res, statusText, jqXHR) {
-                            //$.cookie(res.cookie.name, res.cookie.id, { domain: '.ruletheseas.com', path: '/' }); //'{$JOOMLA_URL}'
-                            console.log(res);
-                            jQuery('#hud').html(res).trigger('update', [res, statusText, jqXHR]);
-                            jQuery('#hud a').each(function () {
-                                jQuery(this).attr('href',"//"+ HUD.Server.URL + "/" + jQuery(this).attr('href'));
-                            });
-                            jQuery('#hud img').each(function () {
-                                jQuery(this).attr('src',"//"+ HUD.Server.URL + "/" + jQuery(this).attr('src'));
-                            });
-                            jQuery('#hud *[background]').each(function () {
-                                jQuery(this).attr('background',"//"+ HUD.Server.URL + "/" + jQuery(this).attr('background'));
-                            });
-                        },
-                        error: function (jqXHR, textStatus, errorThrown ) {
-                            console.log(jqXHR, textStatus, errorThrown);
-                        },
-                        statusCode: {
-                            403: function () {
-                                alert( "request not valid." );
+                HUD: {
+                    OnUpdate: function (func) {
+                        jQuery('#hud').bind('update', func);
+                    }, Update: function (){
+                        var hudURL = '//'+RTS.Server.URL+'/serve/serve_me.php?what=zwrap&action=user_hud&key='+RTS.Server.Key;
+                        //jQuery('#hud').load(hudURL, function(response, statusText, jqXHR) {
+                        //   jQuery('#hud').trigger('update', [response, statusText, jqXHR]);
+                        //});
+                        var jqXHR = jQuery.ajax({
+                            type: "GET",
+                            url: hudURL,
+                            data: {},
+                            xhrFields: {
+                                withCredentials: true
                             },
-                            404: function() {
-                                alert( "page not found." );
-                            }
-                        },
-                        dataType: 'html'
-                    });
+                            success: function (res, statusText, jqXHR) {
+                                //$.cookie(res.cookie.name, res.cookie.id, { domain: '.ruletheseas.com', path: '/' }); //'{$JOOMLA_URL}'
+                                console.log(res);
+                                jQuery('#hud').html(res).trigger('update', [res, statusText, jqXHR]);
+                                jQuery('#hud a').each(function () {
+                                    jQuery(this).attr('href',"//"+ RTS.Server.URL + "/" + jQuery(this).attr('href'));
+                                });
+                                jQuery('#hud img').each(function () {
+                                    jQuery(this).attr('src',"//"+ RTS.Server.URL + "/" + jQuery(this).attr('src'));
+                                });
+                                jQuery('#hud *[background]').each(function () {
+                                    jQuery(this).attr('background',"//"+ RTS.Server.URL + "/" + jQuery(this).attr('background'));
+                                });
+                            },
+                            error: function (jqXHR, textStatus, errorThrown ) {
+                                console.log(jqXHR, textStatus, errorThrown);
+                            },
+                            statusCode: {
+                                403: function () {
+                                    alert( "request not valid." );
+                                },
+                                404: function() {
+                                    alert( "page not found." );
+                                }
+                            },
+                            dataType: 'html'
+                        });
+                    }
                 }
             };
+            jQuery('document').ready(function () {
+                RTS.HUD.Update();
+            });
             <!-- <?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?> -->
         </script>
-        <?php } ?>
 	<jdoc:include type="modules" name="debug" style="none" />
+        
+<?php } else { ?>
+        <div><h1>Please login to your RTS server then come here.</h1></div>
+<?php } ?>
 </body>
 </html>
