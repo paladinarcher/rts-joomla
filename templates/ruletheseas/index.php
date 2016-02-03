@@ -142,7 +142,7 @@ else
 	. ($itemid ? ' itemid-' . $itemid : '')
 	. ($params->get('fluidContainer') ? ' fluid' : '');
 	echo ($this->direction == 'rtl' ? ' rtl' : '');
-?>" id="body" style="background: url('//www.ruletheseas.com/images/www.ruletheseas.com_Main.jpg') no-repeat top center black;">
+?>" id="body" style="background: url('//<?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?>/images/<?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?>_Main.jpg') no-repeat top center black;">
 
     <div class="hud" id="hud">
         
