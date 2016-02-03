@@ -26,7 +26,7 @@ class RtsusersApiResourceGetuser extends ApiResource {
 
     public function post() { $this->plugin->setResponse($this->keygen()); }
     
-    public function findUser($server_name, $user_id) {
+    public function findUser($server_name, $user_id, $key) {
         $db = JFactory::getDbo();
         $db->setQuery('SELECT * FROM #__rts_users WHERE rts_server = "'. $server_name . '" AND rts_user_id = '.(int)$user_id );
         $result = $db->loadResult();
@@ -37,15 +37,25 @@ class RtsusersApiResourceGetuser extends ApiResource {
             return false;
         }
         $user = JFactory::getUser();
-        if ($user->id && $result == $user->id) { return $user; }
+        if ($user->id && $result == $user->id) { 
+            $this->setActiveSite($user, $server_name);
+            return $user; 
+        }
         
         $usr = JFactory::getUser($result);
-        return $this->loginUser($usr);
+        return $this->loginUser($usr, $server_name, $key);
     }
-    public function loginUser($user) {
+    public function setActiveSite($user, $server_name, $key) {
+        JPluginHelper::importPlugin('user');
+        $user->setParam('active_rts_site', $server_name);
+        $user->setParam('active_rts_key', $key);
+        $user->save();
         $session = JFactory::getSession();
         $session->set('user', $user);
-        JPluginHelper::importPlugin('user');
+        return $user;
+    }
+    public function loginUser($user, $server_name, $key) {
+        $this->setActiveSite($user, $server_name, $key);
         JFactory::getApplication('site')->triggerEvent('onUserLogin', array(array('username'=>$user->username), array('action' => 'core.login.site')));
         return $user;
     }
@@ -76,11 +86,11 @@ class RtsusersApiResourceGetuser extends ApiResource {
         $instance->set('id'         , 0);
         $instance->set('name'           , $fromRemote->user->user_name);
         $instance->set('username'       , $fromRemote->user->login_name);
-        $instance->set('password' , $password);
+        $instance->set('password'       , $password);
         $instance->set('password_clear' , $password_clear);
         $instance->set('email'          , $fromRemote->user->email);
         $instance->set('usertype'       , 'deprecated');
-        $instance->set('groups'     , array($defaultUserGroup));
+        $instance->set('groups'         , array($defaultUserGroup));
         // Here is possible set user profile details
         //$instance->set('profile'    , array('gender' =>  $fromRemote['gender']));
 
@@ -128,7 +138,7 @@ class RtsusersApiResourceGetuser extends ApiResource {
 
                 // Your code here...
             }
-            return $this->loginUser($user);
+            return $this->loginUser($user, $server, $fromRemote->user->sessionkey);
         }
         throw new Exception("Something went weird with the save...");
     }
@@ -154,7 +164,7 @@ class RtsusersApiResourceGetuser extends ApiResource {
         }
         
         if(!$this->isRTSServer($server)) { return $this->ret(405,"Unauthorized server. Sorry.", new stdClass()); }
-        $u = $this->findUser($server, $user['id']);
+        $u = $this->findUser($server, $user['id'], $fromRemote->user->sessionkey);
         if($u->id) {
             //$obj->user = $u;
         } else {
@@ -165,7 +175,9 @@ class RtsusersApiResourceGetuser extends ApiResource {
         }
         $obj = new stdClass();
         $obj->user = $u;
-        if($u->id) { $obj->hash = $this->getUserHash($u); }
+        if($u->id) { 
+            $obj->hash = $this->getUserHash($u); 
+        }
         $obj->cookie = new stdClass();
         $obj->cookie->name = session_name();
         $obj->cookie->id = session_id();

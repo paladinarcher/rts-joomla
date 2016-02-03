@@ -119,6 +119,10 @@ else
 		{
 			background: <?php echo $this->params->get('templateColor'); ?>;
 		}
+                div.hud {
+                    width:100%;
+                    height:275px;
+                }
 	</style>
 	<?php endif; ?>
 	<!--[if lt IE 9]>
@@ -135,7 +139,9 @@ else
 	echo ($this->direction == 'rtl' ? ' rtl' : '');
 ?>" id="body" style="background: url('//www.ruletheseas.com/images/www.ruletheseas.com_Main.jpg') no-repeat top center black;">
 
-    
+    <div class="hud" id="hud">
+        
+    </div>
 	<!-- Body -->
 	<div class="body">
 		<div class="container<?php echo ($params->get('fluidContainer') ? '-fluid' : ''); ?>">
@@ -211,6 +217,46 @@ else
 			</p>
 		</div>
 	</footer>
+        <?php if(!$user->guest) { ?>
+        <script type="text/javascript">
+            var HUD = {
+                OnUpdate: function (func) {
+                    jQuery('#hud').bind('update', func);
+                }, Update: function (){
+                    var hudURL = '//<?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?>/serve/serve_me.php?what=zwrap&action=user_hud&key=<?php echo $user->getParam('active_rts_key', 'OOPS'); ?>';
+                    //jQuery('#hud').load(hudURL, function(response, statusText, jqXHR) {
+                    //   jQuery('#hud').trigger('update', [response, statusText, jqXHR]);
+                    //});
+                    var jqXHR = jQuery.ajax({
+                        type: "GET",
+                        url: hudURL,
+                        data: {},
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function (res, statusText, jqXHR) {
+                            //$.cookie(res.cookie.name, res.cookie.id, { domain: '.ruletheseas.com', path: '/' }); //'{$JOOMLA_URL}'
+                            console.log(res);
+                            jQuery('#hud').html(res).trigger('update', [res, statusText, jqXHR]);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown ) {
+                            console.log(jqXHR, textStatus, errorThrown);
+                        },
+                        statusCode: {
+                            403: function () {
+                                alert( "request not valid." );
+                            },
+                            404: function() {
+                                alert( "page not found." );
+                            }
+                        },
+                        dataType: 'html'
+                    });
+                }
+            };
+            <!-- <?php echo $user->getParam('active_rts_site', 'www.ruletheseas.com'); ?> -->
+        </script>
+        <?php } ?>
 	<jdoc:include type="modules" name="debug" style="none" />
 </body>
 </html>

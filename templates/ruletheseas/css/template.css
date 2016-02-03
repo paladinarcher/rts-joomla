@@ -7035,9 +7035,6 @@ body.site.fluid {
 .container {
 	max-width: 960px;
 }
-.body {
-    margin-top:250px;
-}
 .body .container {
 	/* background-color: #fff; */
 	-moz-border-radius: 4px;
