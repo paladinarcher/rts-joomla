@@ -286,7 +286,7 @@ else
 	<jdoc:include type="modules" name="debug" style="none" />
         
 <?php } else { ?>
-        <div><h1>Please login to your RTS server then come here.</h1></div>
+        <div style="margin-top:300px;"><h1>Please login to your RTS server then come here.</h1></div>
 <?php } ?>
 </body>
 </html>
