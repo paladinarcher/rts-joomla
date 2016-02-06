@@ -101,7 +101,9 @@ class RtsusersApiResourceGetuser extends ApiResource {
             $instance->set('activation'    , JApplication::getHash(JUserHelper::genRandomPassword()));
         }
 
-        if (!$instance->save()) { throw new Exception("{$fromRemote->user->email} is already in use."); }
+        if (!$instance->save()) { 
+            if($fromRemote->user->email) { $this->linkMe($this->getUserIDByEmail($fromRemote->user->email), $fromRemote, $server); }
+        }
 
         $join = date('Y-m-d H:i:s', $fromRemote->user->join_date);
         $last = date('Y-m-d H:i:s', $fromRemote->user->last_active);
@@ -213,6 +215,29 @@ class RtsusersApiResourceGetuser extends ApiResource {
             $key = $result->hash;
         }
         return $key;
+    }
+    protected function getUserIDByEmail($email) {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true)
+                ->select($db->quoteName('id'))
+                ->from($db->quoteName('#__users'))
+                ->where($db->quoteName('email') . ' = ' . $db->quote($email));
+        $db->setQuery($query, 0, 1);
+
+        return $db->loadResult();
+    }
+    protected function linkMe($user_id, $fromRemote, $server) {
+        $db = JFactory::getDbo();
+        $user = JFactory::getUser($user_id);
+        $query = $db->getQuery(true)
+                ->select($db->quoteName('creation_date'))
+                ->from($db->quoteName('#__rts_users'))
+                ->where($db->quoteName('user_id') . ' = ' . $db->quote($user->id). ' AND '. $db->quoteName('rts_server') .' = '.$db->quote($server));
+        $db->setQuery($query, 0, 1);
+        if($db->loadResult()) { throw new Exception("{$user->email} is already registered and linked to an account on {$server}"); }
+        $db->setQuery("insert into #__rts_users set user_id={$user->id}, rts_server='{$server}', rts_user_id={$fromRemote->user->id}");
+        $db->query();
+        return $this->loginUser($user, $server, $fromRemote->sessionkey);
     }
 }
 
