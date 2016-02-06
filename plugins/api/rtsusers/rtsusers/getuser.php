@@ -103,6 +103,7 @@ class RtsusersApiResourceGetuser extends ApiResource {
 
         if (!$instance->save()) { 
             if($fromRemote->user->email) { return $this->linkMe($this->getUserIDByEmail($fromRemote->user->email), $fromRemote, $server); }
+            throw new Exception("No email address specified, can't register without one!");
         }
 
         $join = date('Y-m-d H:i:s', $fromRemote->user->join_date);
