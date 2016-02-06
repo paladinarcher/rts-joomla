@@ -9,10 +9,10 @@ defined('_JEXEC') or die( 'Restricted access' );
 jimport('joomla.plugin.plugin');
 class plgAPIRtsusers extends ApiPlugin
 {
-    const API_KEY = 'A0*cK3924-';
-    public function __construct(&$subject, $config = array())
+    const API_KEY = 'A0*cK3924-'; //&$subject, $config = array()
+    public function __construct()
     {
-        parent::__construct($subject, $config = array());
+        parent::__construct(); //$subject, $config = array()
         ApiResource::addIncludePath(dirname(__FILE__).'/rtsusers');
 
         // Set the login resource to be public
