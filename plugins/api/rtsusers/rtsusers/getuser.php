@@ -40,7 +40,7 @@ class RtsusersApiResourceGetuser extends ApiResource {
         
         $user = JFactory::getUser();
         if ($user->id && $result == $user->id) { 
-            $this->setActiveSite($user, $server_name);
+            $this->setActiveSite($user, $server_name, $key);
             return $user; 
         }
         
