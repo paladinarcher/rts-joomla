@@ -231,13 +231,17 @@ class RtsusersApiResourceGetuser extends ApiResource {
                 ->where($db->quoteName('user_id') . ' = ' . $db->quote($user->id). ' AND '. $db->quoteName('rts_server') .' = '.$db->quote($server));
         $db->setQuery($query, 0, 1);
         if($db->loadResult()) { throw new Exception("{$user->email} is already registered and linked to an account on {$server}"); }
-        $this->link($user->id, $fromRemote->user->id, $server);
-        return $this->loginUser($user, $server, $fromRemote->sessionkey);
+        return $this->link($user->id, $fromRemote->user->id, $server)->loginUser($user, $server, $fromRemote->sessionkey);
     }
     protected function link($user_id, $rts_user_id, $server) {
         $db = JFactory::getDbo();
         $db->setQuery("insert into #__rts_users set user_id={$user_id}, rts_server='{$server}', rts_user_id={$rts_user_id}");
-        return $db->query();
+        $db->query();
+        if ($db->getErrorNum()) {
+            error_log($db->getErrorMsg());
+            throw new Exception($db->getErrorMsg());
+        }
+        return $this;
     }
 }
 
