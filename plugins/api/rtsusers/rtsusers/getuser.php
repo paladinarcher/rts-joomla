@@ -102,7 +102,7 @@ class RtsusersApiResourceGetuser extends ApiResource {
         }
 
         if (!$instance->save()) { 
-            if($fromRemote->user->email) { $this->linkMe($this->getUserIDByEmail($fromRemote->user->email), $fromRemote, $server); }
+            if($fromRemote->user->email) { return $this->linkMe($this->getUserIDByEmail($fromRemote->user->email), $fromRemote, $server); }
         }
 
         $join = date('Y-m-d H:i:s', $fromRemote->user->join_date);
