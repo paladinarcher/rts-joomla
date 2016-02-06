@@ -110,17 +110,12 @@ class RtsusersApiResourceGetuser extends ApiResource {
         $db->setQuery("update #__users set registerDate='{$join}', lastvisitDate='{$last}', email='{$fromRemote->user->email}' where username='{$fromRemote->user->login_name}'");
         $db->query();
 
-        $db->setQuery("SELECT id FROM #__users WHERE email='{$fromRemote->user->email}'");
-        $db->query();
-        $newUserID = $db->loadResult();
-
-        $user = JFactory::getUser($newUserID);
+        $user = JFactory::getUser($this->getUserIDByEmail($fromRemote->user->email));
 
         // Everything OK!               
         if ($user->id != 0)
         {
-            $db->setQuery("insert into #__rts_users set user_id={$user->id}, rts_server='{$server}', rts_user_id={$fromRemote->user->id}");
-            $db->query();
+            $this->link($user->id, $fromRemote->user->id, $server);
             // Auto registration
             if($useractivation == 0)
             {
@@ -235,9 +230,13 @@ class RtsusersApiResourceGetuser extends ApiResource {
                 ->where($db->quoteName('user_id') . ' = ' . $db->quote($user->id). ' AND '. $db->quoteName('rts_server') .' = '.$db->quote($server));
         $db->setQuery($query, 0, 1);
         if($db->loadResult()) { throw new Exception("{$user->email} is already registered and linked to an account on {$server}"); }
-        $db->setQuery("insert into #__rts_users set user_id={$user->id}, rts_server='{$server}', rts_user_id={$fromRemote->user->id}");
-        $db->query();
+        $this->link($user->id, $fromRemote->user->id, $server);
         return $this->loginUser($user, $server, $fromRemote->sessionkey);
+    }
+    protected function link($user_id, $rts_user_id, $server) {
+        $db = JFactory::getDbo();
+        $db->setQuery("insert into #__rts_users set user_id={$user_id}, rts_server='{$server}', rts_user_id={$rts_user_id}");
+        return $db->query();
     }
 }
 
