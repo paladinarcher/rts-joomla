@@ -87,7 +87,7 @@ class RtsusersApiResourceGetuser extends ApiResource {
         $instance = JUser::getInstance();
         $instance->set('id'         , 0);
         $instance->set('name'           , $fromRemote->user->user_name);
-        $instance->set('username'       , $fromRemote->user->login_name);
+        $instance->set('username'       , ($fromRemote->user->login_name ? $fromRemote->user->login_name : $fromRemote->user->email));
         $instance->set('password'       , $password);
         $instance->set('password_clear' , $password_clear);
         $instance->set('email'          , $fromRemote->user->email);
