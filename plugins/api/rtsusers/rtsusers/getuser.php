@@ -62,6 +62,8 @@ class RtsusersApiResourceGetuser extends ApiResource {
         return $user;
     }
     public function createUser($server, $fromRemote) {
+	if(!$fromRemote) { throw new Exception("No remote user"); }
+	if(!$fromRemote->user) { throw new Exception("No remote user"); }
         $mainframe = JFactory::getApplication('site');
         $mainframe->initialise();
         //$user = clone(JFactory::getUser());
